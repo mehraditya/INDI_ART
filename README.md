@@ -15,8 +15,8 @@ Generate Indian traditional art (Madhubani, Warli, Gond, Pattachitra, Tanjore, e
 ## Quick Start (Local)
 
 ```bash
-git clone https://github.com/yourusername/indian-art-sdxl-api.git
-cd indian-art-sdxl-api
+git clone https://github.com/yourusername/INDI_ART.git
+cd INDI_ART
 
 python -m venv venv
 venv\Scripts\activate  # or source venv/bin/activate

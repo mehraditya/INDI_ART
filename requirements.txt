@@ -13,7 +13,6 @@ safetensors==0.4.4
 
 # Gradio & Spaces
 gradio==4.42.0
-gradio_client==0.9.1
 
 # Utilities
 pillow==10.4.0

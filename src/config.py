@@ -74,5 +74,5 @@ class Config:
     def validate(cls):
         """Validate configuration"""
         if cls.LORA_PATH is None:
-            print("⚠️ Warning: LORA_PATH not set. Using base SDXL model only.")
+            print(" Warning: LORA_PATH not set. Using base SDXL model only.")
         return True

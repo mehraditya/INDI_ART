@@ -1,5 +1,6 @@
 ---
 title: Indian Art Generator
+emoji: 🎨
 colorFrom: orange
 colorTo: red
 sdk: gradio

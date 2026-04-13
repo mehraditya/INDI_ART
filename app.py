@@ -123,7 +123,7 @@ def create_ui():
                 )
 
                 # Hidden constants display
-                with gr.Accordion("Generation Settings", open=False):
+                with gr.Accordion("Generation Settings"):
                     gr.Markdown(f"""
                     - Resolution: {DEFAULT_WIDTH}x{DEFAULT_HEIGHT}
                     - Steps: {DEFAULT_STEPS}
@@ -183,5 +183,5 @@ if __name__ == "__main__":
         server_port=int(os.getenv("PORT", 7860)),
         share=False,
         show_api=False,
-        quiet=False
+        quiet=True
     )

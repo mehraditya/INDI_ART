@@ -20,7 +20,7 @@ class Config:
     # Generation Defaults
     DEFAULT_WIDTH = int(os.getenv("DEFAULT_WIDTH", "512"))
     DEFAULT_HEIGHT = int(os.getenv("DEFAULT_HEIGHT", "512"))
-    DEFAULT_STEPS = int(os.getenv("DEFAULT_STEPS", "30"))
+    DEFAULT_STEPS = int(os.getenv("DEFAULT_STEPS", "20" if os.getenv("DEVICE") == "cpu" else "30"))
     DEFAULT_GUIDANCE = float(os.getenv("DEFAULT_GUIDANCE", "7.5"))
     DEFAULT_LORA_SCALE = float(os.getenv("DEFAULT_LORA_SCALE", "0.8"))
 

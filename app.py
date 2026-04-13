@@ -29,14 +29,20 @@ DEFAULT_LORA_SCALE = 0.8
 DEFAULT_SEED = -1  # Random
 
 
-def get_generator():
-    """Lazy initialization of model"""
-    if generator.pipe is None:
-        generator.load_model()
-    return generator
+# def get_generator():
+#     """Lazy initialization of model"""
+#     if generator.pipe is None:
+#         generator.load_model()
+#     return generator
 
+def get_gpu_decorator():
+    try:
+        import spaces
+        return spaces.GPU(duration=60)
+    except (ImportError, AttributeError):
+        return lambda f: f
 
-@spaces.GPU(duration=60)
+@get_gpu_decorator()
 def generate_api(prompt: str, art_style: str):
     """
     Generate image from prompt and art style.
@@ -48,9 +54,14 @@ def generate_api(prompt: str, art_style: str):
     if len(prompt) > 1000:
         raise gr.Error("Prompt too long (max 1000 chars)")
 
-    gen = get_generator()
+    # gen = get_generator()
 
-    image, metadata = gen.generate(
+    #Lazy-load inside GPU context, so ZEROGPU can map weights onto GPU
+    if generator.pipe is None:
+        generator.load_model() 
+    
+
+    image, metadata = generator.generate(
         prompt=prompt,
         negative_prompt="",  # Uses default negatives from config
         art_style=art_style,

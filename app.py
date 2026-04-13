@@ -7,7 +7,6 @@ import os
 import sys
 import json
 import gradio as gr
-import spaces
 from PIL import Image
 
 # Add src to path
@@ -35,14 +34,18 @@ DEFAULT_SEED = -1  # Random
 #         generator.load_model()
 #     return generator
 
-def get_gpu_decorator():
-    try:
-        import spaces
-        return spaces.GPU(duration=60)
-    except (ImportError, AttributeError):
-        return lambda f: f
+try:
+    import spaces
+    ZERO_GPU_AVAILABLE = True
+except ImportError:
+    ZERO_GPU_AVAILABLE = False
 
-@get_gpu_decorator()
+def conditional_gpu_decorator(fn):
+    if ZERO_GPU_AVAILABLE:
+        return spaces.GPU(duration=60)(fn)
+    return fn
+
+@conditional_gpu_decorator()
 def generate_api(prompt: str, art_style: str):
     """
     Generate image from prompt and art style.
@@ -139,7 +142,6 @@ def create_ui():
 
                 output_metadata = gr.JSON(
                     label="Metadata",
-                    open=False
                 )
 
         # Examples
@@ -180,6 +182,6 @@ if __name__ == "__main__":
         server_name="0.0.0.0",
         server_port=int(os.getenv("PORT", 7860)),
         share=Config.GRADIO_SHARE,
-        show_api=True,
+        show_api=False,
         quiet=False
     )

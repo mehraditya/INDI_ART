@@ -141,7 +141,7 @@ def create_ui():
                 )
 
                 output_metadata = gr.JSON(
-                    label="Metadata",
+                    label="Metadata"
                 )
 
         # Examples
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     demo.launch(
         server_name="0.0.0.0",
         server_port=int(os.getenv("PORT", 7860)),
-        share=Config.GRADIO_SHARE,
+        share=False,
         show_api=False,
         quiet=False
     )

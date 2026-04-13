@@ -45,7 +45,7 @@ def conditional_gpu_decorator(fn):
         return spaces.GPU(duration=60)(fn)
     return fn
 
-@conditional_gpu_decorator()
+@conditional_gpu_decorator
 def generate_api(prompt: str, art_style: str):
     """
     Generate image from prompt and art style.

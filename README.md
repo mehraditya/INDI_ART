@@ -1,14 +1,24 @@
-# Indian Art SDXL LoRA API
+---
+title: Indian Art Generator
+colorFrom: orange
+colorTo: red
+sdk: gradio
+sdk_version: "4.42.0"
+python_version: "3.12"
+app_file: app.py
+pinned: false
+---
 
-Generate Indian traditional art (Madhubani, Warli, Gond, Pattachitra, Tanjore, etc.) using SDXL + LoRA. Optimized for Hugging Face Spaces (ZeroGPU).
+# Indian Art LoRA API
+
+Generate Indian traditional art (Madhubani, Warli, Gond, Pattachitra, Tanjore, etc.) using SD 1.5 + LoRA.
 
 ---
 
 ## Features
-- Built-in negative prompts to reduce Western/modern bias  
-- Works on Hugging Face Spaces (ZeroGPU)  
-- Supports LoRA (local or HF Hub)  
-- Simple API + Gradio UI  
+- Built-in negative prompts to reduce Western/modern bias
+- Supports LoRA (local or HF Hub)
+- Simple API + Gradio UI
 
 ---
 
@@ -19,21 +29,19 @@ git clone https://github.com/yourusername/INDI_ART.git
 cd INDI_ART
 
 python -m venv venv
-venv\Scripts\activate  # or source venv/bin/activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
 pip install -r requirements.txt
 ```
 
 ### Configure LoRA
 
-.env:
-
+`.env`:
 ```
 LORA_PATH=your-username/indian-art-lora
 ```
 
 or local:
-
 ```
 LORA_PATH=./models/lora.safetensors
 ```
@@ -44,19 +52,8 @@ LORA_PATH=./models/lora.safetensors
 python app.py
 ```
 
-- UI: http://localhost:7860  
-- API: http://localhost:7860/api/predict/generate_api  
-
----
-
-## Hugging Face Spaces (Recommended)
-
-1. Create Space (Gradio, ZeroGPU)  
-2. Connect to GitHub repo  
-3. Set LORA_PATH if using HF weights  
-
-App URL:
-https://<username>-<space>.hf.space
+- UI: http://localhost:7860
+- API: http://localhost:7860/api/predict/generate_api
 
 ---
 
@@ -89,22 +86,22 @@ curl -X POST https://<space>.hf.space/api/predict/generate_api \
 ## Configuration
 
 | Variable | Description | Default |
-|----------|------------|--------|
-| LORA_PATH | LoRA weights | None |
-| BASE_MODEL | Base model | SDXL |
-| DEFAULT_STEPS | Steps | 30 |
-| DEFAULT_GUIDANCE | CFG | 7.5 |
+|----------|-------------|---------|
+| LORA_PATH | LoRA weights (HF Hub ID or local path) | None |
+| BASE_MODEL | Base model repo | Realistic_Vision_V5.1_noVAE |
+| DEFAULT_STEPS | Inference steps | 30 |
+| DEFAULT_GUIDANCE | CFG scale | 7.5 |
 | DEFAULT_LORA_SCALE | LoRA strength | 0.8 |
-| DEVICE | cuda/cpu | cuda |
-| CACHE_DIR | Cache dir | /tmp |
+| DEVICE | cuda or cpu | cuda |
+| CACHE_DIR | Model cache directory | /tmp |
 
 ---
 
 ## Notes
 
-- Use SD-compatible LoRA only  
-- Keep resolution ≤1024  
-- ZeroGPU has cold starts  
+- Uses SD 1.5 compatible LoRA (not SDXL)
+- Keep resolution ≤ 768×768 on CPU spaces
+- CPU spaces: expect 3–8 min per generation at 30 steps
 
 ---
 
@@ -114,6 +111,7 @@ curl -X POST https://<space>.hf.space/api/predict/generate_api \
 src/
   config.py
   model.py
+  utils.py
 app.py
 requirements.txt
 Dockerfile

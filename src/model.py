@@ -21,6 +21,8 @@ class IndianArtGenerator:
         self.pipe = None
         self.device = Config.DEVICE if torch.cuda.is_available() else "cpu"
         self.is_lora_loaded = False
+        self.current_adapter_name = None
+
         print(f"Device: {self.device}")
 
     def load_model(self, lora_path: Optional[str] = None):
@@ -36,7 +38,7 @@ class IndianArtGenerator:
         self.pipe = StableDiffusionPipeline.from_pretrained(
             Config.BASE_MODEL,
             torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-            variant="fp16" if self.device == "cuda" else None,
+            # variant="fp16" if self.device == "cuda" else None,
             use_safetensors=True,
             cache_dir=Config.CACHE_DIR,
             local_files_only=False

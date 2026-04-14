@@ -75,13 +75,39 @@ class IndianArtGenerator:
         adapter = adapter_name or Config.LORA_ADAPTER_NAME
         path = lora_path or Config.LORA_PATH
         print(f"Loading LoRA from HF Hub: {path} (adapter: {adapter})")
+
         try:
+            from huggingface_hub import hf_hub_download
+            import safetensors.torch as st
+            model_file = hf_hub_download(path, "adapter_model.safetensors",
+                                         cache_dir=Config.CACHE_DIR)
+            
+            # Loading dict
+            state_dict = st.load_file(model_file)
+
+            new_state_dict = {}
+            for key, value in state_dict.items():
+                if key.startswith("base_model.model."):
+                    new_key = key.replace("base_model.model.", "")
+                    new_state_dict[new_key] = value
+                else:
+                    new_state_dict[key] = value
+            import tempfile
+            with tempfile.NamedTemporaryFile(suffix=".safetensors", delete=False) as tmp:
+                temp_path = tmp.name
+                st.save_file(new_state_dict, temp_path)
+
             # HF Hub repo ID or local path - load_lora_weights handles both
-            self.pipe.load_lora_weights(path, adapter_name=adapter)
+            self.pipe.load_lora_weights(temp_path, adapter_name=adapter)
             self.pipe.set_adapters([adapter], [1.0])  # List format for newer diffusers
+            
+            # Clean up the temp file
+            os.remove(temp_path)
+
             self.is_lora_loaded = True
             self.current_adapter_name = adapter
             print(f"LoRA '{adapter}' loaded successfully")
+
         except Exception as e:
             print(f"Error loading LoRA: {e}")
             self.is_lora_loaded = False

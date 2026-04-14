@@ -12,7 +12,7 @@ peft==0.12.0
 safetensors==0.4.4
 
 # Gradio & Spaces
-gradio==4.42.0
+gradio==4.44.1
 
 # Utilities
 pillow==10.4.0

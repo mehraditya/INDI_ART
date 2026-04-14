@@ -3,6 +3,28 @@ Indian Art SD LoRA API
 Main application entry point
 Optimized for HuggingFace Spaces ZeroGPU
 """
+import gradio_client.utils as client_utils
+import functools
+
+_original_json_schema_to_python_type = client_utils._json_schema_to_python_type
+
+@functools.wraps(_original_json_schema_to_python_type)
+def _patched_json_schema_to_python_type(schema, defs=None):
+    # Handle bool schema case that causes "argument of type 'bool' is not iterable"
+    if isinstance(schema, bool):
+        return "Any"
+    # Handle case where schema might be None or other non-dict types
+    if schema is None:
+        return "Any"
+    if not isinstance(schema, dict):
+        return str(type(schema).__name__)
+    return _original_json_schema_to_python_type(schema, defs)
+
+client_utils._json_schema_to_python_type = _patched_json_schema_to_python_type
+# Also patch the public function if it exists
+if hasattr(client_utils, 'json_schema_to_python_type'):
+    client_utils.json_schema_to_python_type = _patched_json_schema_to_python_type
+
 import os
 import sys
 import json

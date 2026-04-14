@@ -8,7 +8,7 @@ class Config:
     """Application configuration"""
 
     # Model Settings
-    BASE_MODEL = os.getenv("BASE_MODEL", "SG161222/Realistic_Vision_V5.1_noVAE")
+    BASE_MODEL = os.getenv("BASE_MODEL", "stable-diffusion-v1-5/stable-diffusion-v1-5")
 
     # LoRA Weights Path
     # Options:
